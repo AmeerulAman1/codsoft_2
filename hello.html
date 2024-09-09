@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track My Package</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 500px;
+            margin: 50px auto;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        input[type="text"] {
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: calc(100% - 30px);
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #trackingInfo {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        .timeline {
+            list-style-type: none;
+            padding: 0;
+            position: relative;
+            max-width: 300px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .timeline:before {
+            content: '';
+            background: #d4d9df;
+            display: inline-block;
+            position: absolute;
+            left: 20px;
+            width: 2px;
+            height: 100%;
+            z-index: 400;
+        }
+
+        .timeline li {
+            margin: 20px 0;
+            padding-left: 50px;
+            position: relative;
+        }
+
+        .timeline li:before {
+            content: '';
+            background: #fff;
+            display: inline-block;
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid #4CAF50;
+            left: 11px;
+            width: 20px;
+            height: 20px;
+            z-index: 400;
+        }
+
+        .timeline li.complete:before {
+            background: #4CAF50;
+        }
+
+        .timeline li.complete h3,
+        .timeline li.complete p {
+            color: #4CAF50;
+        }
+
+        .timeline h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .timeline p {
+            margin: 5px 0 0;
+            color: #666;
+        }
+
+        .expected-delivery {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+    <div class="container">
+        <h1>Order Tracking</h1>
+        <p>Enter your tracking number below to track your package.</p>
+        <input type="text" id="trackingNumber" placeholder="Tracking Number">
+        <button id="trackButton">Track Package</button>
+        <div id="trackingInfo"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const trackButton = document.getElementById('trackButton');
+            const trackingNumberInput = document.getElementById('trackingNumber');
+            const trackingInfo = document.getElementById('trackingInfo');
+
+            const trackingData = {
+                "12345": {
+                    status: ["Order Placed", "Order Confirmed", "Order Processed"],
+                    expectedDelivery: "Thursday, June 15"
+                },
+                "67890": {
+                    status: ["Order Placed", "Order Confirmed", "Order Processed", "Ready to Pickup"],
+                    expectedDelivery: "Monday, June 5"
+                },
+                "11121": {
+                    status: ["Order Placed", "Order Confirmed"],
+                    expectedDelivery: "Today"
+                }
+            };
+
+            trackButton.addEventListener('click', () => {
+                const trackingNumber = trackingNumberInput.value;
+                if (trackingData[trackingNumber]) {
+                    const data = trackingData[trackingNumber];
+                    trackingInfo.innerHTML = `<h2>Order Status</h2>
+                                              <ul class="timeline">
+                                                  <li class="${data.status.includes("Order Placed") ? 'complete' : ''}"><h3>Order Placed</h3><p>We have received your order.</p></li>
+                                                  <li class="${data.status.includes("Order Confirmed") ? 'complete' : ''}"><h3>Order Confirmed</h3><p>Your order has been confirmed.</p></li>
+                                                  <li class="${data.status.includes("Order Processed") ? 'complete' : ''}"><h3>Order Processed</h3><p>We are preparing your order.</p></li>
+                                                  <li class="${data.status.includes("Ready to Pickup") ? 'complete' : ''}"><h3>Ready to Pickup</h3><p>Your order is ready for pickup.</p></li>
+                                              </ul>
+                                              <p class="expected-delivery">Expected Delivery: ${data.expectedDelivery}</p>`;
+                } else {
+                    trackingInfo.innerHTML = `<h2>Tracking information for ${trackingNumber} is not available yet.</h2>`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
